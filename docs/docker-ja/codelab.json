@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-01-13T10:11:02Z",
+  "id": "docker-ja",
+  "duration": 7,
+  "title": "Docker Hands-on",
+  "authors": "Yuki",
+  "summary": "Docker Hands-on",
+  "source": "codelab-ja.md",
+  "theme": "",
+  "status": null,
+  "category": [
+    "docker"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "docker-ja"
+}

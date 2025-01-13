@@ -1,0 +1,143 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Docker Hands-on</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="docker-ja"
+                  title="Docker Hands-on"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="初めに" duration="2">
+        <p>このcodelabでは、Dockerについての基礎を学びます。 Dockerに関連する単語について解説し、実際に、イメージやコンテナを作成して動かしていきます。 このcodelabを通して、Dockerについて基本的な操作を1通り行うことができます。</p>
+<h2 is-upgraded>前提条件</h2>
+<ul>
+<li>インターネットに繋がるPC</li>
+<li>Google アカウント</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Dockerって何？" duration="5">
+        <p>DockerはDocker社が開発している仮想環境プラットフォームです。</p>
+<h2 is-upgraded>仮想環境とは</h2>
+<p>仮想環境とは、1つのコンピュータ上で、別のコンピュータを動作させる環境です。 例えば、仮想環境を使えば、Windows上でLinuxのOSを仮想的に動作させることができます。 仮想環境を用意するOSをホストOS、仮想環境上で動いているOSのことをゲストOSと呼ぶことがあります。</p>
+<p>また、仮想環境上で動作するゲストOSはホストOSから独立しているため、 ゲストOSで行った作業が、ホストOSや他の仮想環境に与える影響は少ないメリットもあります。 (ただし、CPUやメモリのリソースや、仮想環境プラットフォームの脆弱性を狙った攻撃に関しては、ホストOSにも大きな影響を与えます。)</p>
+<p>仮想環境は、独立した環境であるため、複数の開発者で統一した開発環境を用意することにも役立ちます。 「仮想マシン」は、ホストOS上で、ゲストOSを完全にエミュレートします。 ゲストOSは独立したOSを持つため、ゲストOS自体を動作させるためにリソース消費が大きくなってしまう傾向があります。 「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、 仮想マシンよりもリソース消費が少なく済みます。</p>
+<p>Dockerでは、コンテナ型の仮想環境を簡単に作成、管理することができます。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Keywords" duration="0">
+        <p>実際に動かす前に、Dockerで重要なキーワードについて学びましょう。</p>
+<h2 is-upgraded>コンテナ(Container)</h2>
+<p>コンテナは、仮想環境での説明でも出てきましたが、 ここからは、アプリケーション実行に必要な最小限の機能を持った、独立した仮想環境のことを意味します。</p>
+<h2 is-upgraded>イメージ(Image)</h2>
+<p>イメージは、コンテナを作成するためのテンプレートです。 コンテナは基本的に作成時点で何らかの動作をすることになるので、 イメージの段階で、その動作のために必要な機能、変数や設定を定義しておきます。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hello, World" duration="0">
+        <p>とりあえずDockerを動かしてみましょう。 このcodelabでは、Google Cloud の Cloud Shell 上で実行を行います。 <a href="https://shell.cloud.google.com/" target="_blank">https://shell.cloud.google.com/</a> にアクセスしましょう。</p>
+<p>アクセスができたら、黒い画面上に次のコマンドを入力し、Enterで実行しましょう。</p>
+<pre><code>docker run hello-world
+</code></pre>
+<p>こんな感じのメッセージが表示されたら、正しく実行できています。 <img alt="画像" src="img/b6c7564ff3e3f0ec.png"></p>
+<p>何をしたのか振り返っていきましょう。 <code>docker run</code>コマンドを使うと、指定したイメージを元にコンテナを作成し、実行します。 今回は<code>hello-world</code>というイメージを指定しました。</p>
+<p>このイメージは、コンテナにして実行するとこんな感じの出力を出します。</p>
+<pre><code>Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the &#34;hello-world&#34; image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+</code></pre>
+<p>このイメージは元々ローカルにあったわけではなく、<a href="https://hub.docker.com" target="_blank">https://hub.docker.com/ (Docker Hub)</a> にありました。 イメージのサイトが <a href="https://hub.docker.com/_/hello-world" target="_blank">https://hub.docker.com/_/hello-world</a>です。</p>
+<p>Dockerでは、まず特に指定がなければ、ローカルに一致するイメージが存在しないか確認をし、ローカルにあれば そのイメージを使って実行されます。 ローカルにない場合は、Docker Hubにアクセスし、イメージをダウンロードしてきます。</p>
+<p>ちなみに、イメージをローカルにダウンロードしてくることをPullと言います。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Web Server" duration="0">
+        <p>次は<code>httpd</code>というイメージを実行し、Web Serverを作っていきます。 次のコマンドで<code>httpd</code>イメージからコンテナを作成し、実行していきましょう。</p>
+<pre><code>docker run -p 8080:80 httpd
+</code></pre>
+<p>新しく<code>-p 8080:80</code>が増えています。これはポートと呼ばれるもので、 一般的にアクセスするアプリを特定するために使われます。 今回実行する<code>httpd</code>イメージでは、80番ポートで受付を行っています。 左の8080番ポートの8080という数値自体は習慣的につけられているものです。 他と被らない且つ利用できる範囲内であれば、他の数値でも基本的に大丈夫です。</p>
+<p>コマンドが実行できたら、右上の「ウェブでプレビュー」ボタンから「ポート 8080 でプレビュー」をクリックします。 番号が8080でない場合は、「ポートを変更」から8080を指定してください。</p>
+<p>新しいタブが開き、「It works!」と表示されれば、成功です！ 簡易的なWeb Serverを作成することができました！</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Original Web Server" duration="0">
+        <p>先ほどはIt works!と表示されるページを返すWeb Serverを作ることができました。 ただ、これだとオリジナルの内容を表示させることができないので、次はオリジナルの内容を表示させられるようにしましょう。</p>
+<p>次のコマンドを実行して、index.htmlを作成します。</p>
+<pre><code language="language-sh" class="language-sh">cd /tmp
+mkdir codelab-docker-httpd &amp;&amp; cd codelab-docker-httpd
+echo &#34;Hello from Docker container!&#34; &gt; index.html
+</code></pre>
+<p>そして、今度は次のコマンドを実行してWeb Serverを作成します。</p>
+<pre><code language="language-sh" class="language-sh">docker run -p 8080:80 -v /tmp/codelab-docker-httpd/:/usr/local/apache2/htdocs/ httpd
+</code></pre>
+<p>実行できたら、右上の「ウェブでプレビュー」ボタンから「ポート 8080 でプレビュー」で内容を確認してみましょう。</p>
+<p><code>Hello from Docker container!</code>或いは自分で書いた内容が表示されていればOKです。</p>
+<p>先程のコマンドに今度は新しく<code>-v '/tmp/codelab-docker-httpd/:/usr/local/apache2/htdocs/'</code>が追加されました。 これは、ボリュームのマウントと呼ばれるアクションで、ホストOSにあるディレクトリをゲストOSと共有します。 このコマンドでは、ホストOSにある<code>/tmp/codelab-docker-httpd/</code>というディレクトリを ゲストOSの<code>/usr/local/apache2/htdocs</code>というディレクトリで使えるようにしています。</p>
+<p>これで、ゲストOSの内容の一部にホストOSの内容を一部加えることで、独立性をほとんど損なわずに、 ゲストOSのカスタマイズができるようになりました。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next step" duration="0">
+        <p>手元で動かしたい場合→<a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a> Cloud Run→<a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
