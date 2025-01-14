@@ -50,7 +50,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Keywords" duration="0">
+      <google-codelab-step label="Keywords" duration="5">
         <p>実際に動かす前に、Dockerで重要なキーワードについて学びましょう。</p>
 <h2 is-upgraded>コンテナ(Container)</h2>
 <p>コンテナは、仮想環境での説明でも出てきましたが、 ここからは、アプリケーション実行に必要な最小限の機能を持った、独立した仮想環境のことを意味します。</p>
@@ -60,7 +60,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Hello, World" duration="0">
+      <google-codelab-step label="Hello, World" duration="10">
         <p>とりあえずDockerを動かしてみましょう。 このcodelabでは、Google Cloud の Cloud Shell 上で実行を行います。 <a href="https://shell.cloud.google.com/" target="_blank">https://shell.cloud.google.com/</a> にアクセスしましょう。</p>
 <p>アクセスができたら、黒い画面上に次のコマンドを入力し、Enterで実行しましょう。</p>
 <pre><code>docker run hello-world
@@ -96,8 +96,8 @@ For more examples and ideas, visit:
 
       </google-codelab-step>
     
-      <google-codelab-step label="Web Server" duration="0">
-        <p>次は<code>httpd</code>というイメージを実行し、Web Serverを作っていきます。 次のコマンドで<code>httpd</code>イメージからコンテナを作成し、実行していきましょう。</p>
+      <google-codelab-step label="Web Server" duration="13">
+        <p><code>httpd</code>というイメージを実行し、Web Serverを作っていきます。 次のコマンドで<code>httpd</code>イメージからコンテナを作成し、実行していきましょう。</p>
 <pre><code>docker run -p 8080:80 httpd
 </code></pre>
 <p>新しく<code>-p 8080:80</code>が増えています。これはポートと呼ばれるもので、 一般的にアクセスするアプリを特定するために使われます。 今回実行する<code>httpd</code>イメージでは、80番ポートで受付を行っています。 左の8080番ポートの8080という数値自体は習慣的につけられているものです。 他と被らない且つ利用できる範囲内であれば、他の数値でも基本的に大丈夫です。</p>
@@ -107,9 +107,8 @@ For more examples and ideas, visit:
 
       </google-codelab-step>
     
-      <google-codelab-step label="Original Web Server" duration="0">
-        <p>先ほどはIt works!と表示されるページを返すWeb Serverを作ることができました。 ただ、これだとオリジナルの内容を表示させることができないので、次はオリジナルの内容を表示させられるようにしましょう。</p>
-<p>次のコマンドを実行して、index.htmlを作成します。</p>
+      <google-codelab-step label="Original Web Server" duration="13">
+        <p>次のコマンドを実行して、index.htmlを作成します。</p>
 <pre><code language="language-sh" class="language-sh">cd /tmp
 mkdir codelab-docker-httpd &amp;&amp; cd codelab-docker-httpd
 echo &#34;Hello from Docker container!&#34; &gt; index.html
@@ -125,8 +124,89 @@ echo &#34;Hello from Docker container!&#34; &gt; index.html
 
       </google-codelab-step>
     
-      <google-codelab-step label="Next step" duration="0">
-        <p>手元で動かしたい場合→<a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a> Cloud Run→<a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
+      <google-codelab-step label="Dockerfile" duration="10">
+        <p>DockerfileはDockerのイメージを作成するために必要な情報を書き込んだテキストファイルです。 OSやインストールするソフトウェアや実行するコマンドなどを設定することができます。 実際に書く前に、いくつかインストラクションを紹介しておきます。(コマンドのような物です。)</p>
+<h2 is-upgraded>FROM</h2>
+<p>Dockerfileの中で1番最初に記述されるべき物です。 FROMでは、Docker イメージのベースを指定します。</p>
+<p>Docker Hubで公開されているイメージの中には、 カスタマイズが前提で、最低限の機能しか入っていないイメージもあるので、 初めからカスタマイズしていきたい場合は、必要なOSのイメージを見つけると良いです。</p>
+<h2 is-upgraded>RUN</h2>
+<p>Docker イメージをビルドする時に、コマンドを実行するインストラクションです。</p>
+<p>RUNに、ソフトウェアのインストールコマンドを渡しておけば、 Docker イメージにインストールしておきたいソフトウェアを追加することができます。</p>
+<h2 is-upgraded>COPY</h2>
+<p>Docker イメージに、ローカルにあるファイルやディレクトリをコピーして入れておくことができます。</p>
+<p>コマンドを使って取得できないソフトウェアや新しく作成したファイルがあれば、 COPYを使って、Docker イメージに入れておくことができます。</p>
+<h2 is-upgraded>WORKDIR</h2>
+<p>作業ディレクトリを指定します。</p>
+<p>コマンドによっては作業ディレクトリがどこであるかが重要な事があるので、 作業ディレクトリの指定が必要な場合や、作業ディレクトリを変更しておいた方が コマンドが見やすくなる場合は積極的に使っていきましょう。</p>
+<h2 is-upgraded>CMD</h2>
+<p>Docker イメージをコンテナ化した後に、実行される時にデフォルトで実行されるコマンドです。</p>
+<p>動かしたいアプリケーションを動作させるためのコマンドを入れておくと良いと思います。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Let&#39;s write Dockerfile" duration="25">
+        <p>Webアプリケーションを準備するために、次のコマンドを実行してください。</p>
+<pre><code language="language-bash" class="language-bash">cd
+git clone https://github.com/docker/getting-started-app.git 
+cd getting-started-app
+</code></pre>
+<p><code>getting-started-app</code>のディレクトリ内で、<code>Dockerfile</code>を作成します。(ファイル名も<code>Dockerfile</code>です。) Dockerfileの内容は次のようにしましょう。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">FROM ubuntu:24.04
+RUN apt-get update \
+    &amp;&amp; apt-get upgrade -y \
+    &amp;&amp; apt-get install nodejs npm -y \
+    &amp;&amp; apt-get clean
+RUN npm install -g yarn
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD [&#34;node&#34;, &#34;src/index.js&#34;]
+EXPOSE 3000
+</code></pre>
+<p>前のページで説明していないインストラクションも出てきていますが、ひとまずビルドしてみましょう。 ビルドするには次のコマンドを実行します。</p>
+<pre><code language="language-bash" class="language-bash">docker build -t getting-started .
+</code></pre>
+<p>ビルド中のログが適宜流れます。特にエラーが出てこなければ、ビルド成功です。 ビルドしたイメージは次のコマンドでコンテナ化して実行します。</p>
+<pre><code language="language-bash" class="language-bash">docker run -d -p 8080:3000 getting-started
+</code></pre>
+<p>今回も、ウェブでプレビューで ポート 8080 でプレビューして、見てみましょう。</p>
+<p>Todoアプリの画面が表示されたら成功です。</p>
+<h2 is-upgraded>振り返り</h2>
+<p>Dockerfileを作成して実行することができたら、Dockerfileの内容を振り返りましょう。 1つずつ確認していきます。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">FROM ubuntu:24.04
+</code></pre>
+<p>FROMのインストラクションは基となるイメージを指定する物でした。 今回はubuntuの24.04のイメージを指定しています。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">RUN apt-get update \
+    &amp;&amp; apt-get upgrade -y \
+    &amp;&amp; apt-get install nodejs npm -y \
+    &amp;&amp; apt-get clean
+RUN npm install -g yarn
+</code></pre>
+<p>RUNはDocker イメージをビルドする時に、コマンドを実行する物でした。 ここでは4つのコマンドを1つのインストラクションにまとめて実行しています。 Shellに関して補足をしておくと、バックスラッシュ(<code>\</code>)を書いておくと、コマンドの途中でも改行が入れることができます。 <code>&&</code>は、コマンド間を繋げる演算子で、前のコマンドが成功したら次のコマンドが実行されるというものになります。</p>
+<p>ここでは、Ubuntuのパッケージ管理システムと<code>npm</code>を使って、 今回のWebアプリケーションの実行に必要なソフトウェアをインストールしています。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">WORKDIR /app
+</code></pre>
+<p>WORKDIRは作業ディレクトリを指定する物でした。 今回は、<code>/app</code>を作業ディレクトリとして設定し、 Webアプリケーションもこのディレクトリに格納して、実行するようにしています。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">COPY . .
+</code></pre>
+<p>COPYはホストOSにあるディレクトリやファイルをDocker イメージの中に入れる物でした。 今回は、ホストOSの作業ディレクトリを、Docker イメージの作業ディレクトリにコピーしていました。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">RUN yarn install --production
+</code></pre>
+<p>今回のWebアプリケーションの実行に必要なソフトウェアをインストールしています。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">CMD [&#34;node&#34;, &#34;src/index.js&#34;]
+</code></pre>
+<p>CMDはDocker イメージをコンテナ化して実行した時にデフォルトで実行されるコマンドを指定する物でした。 今回はWebアプリケーションを実行するためのコマンドを指定しています。</p>
+<pre><code language="language-Dockerfile" class="language-Dockerfile">EXPOSE 3000
+</code></pre>
+<p>EXPOSEはこのDocker イメージが使用するポート番号を指定する物です。 ただ、このインストラクションはこれだけではあまり大きな意味を持たず、 実行時にコマンドで指定をすることで意味を持ちます。 「このインストラクションさえ書いておけば外部からアクセスできるようになる」というわけではないんです。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next step" duration="5">
+        <p>手元で動かしたい場合→<a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a></p>
+<p>Cloud Run→<a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
 
 
       </google-codelab-step>
