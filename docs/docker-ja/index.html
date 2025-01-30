@@ -29,7 +29,7 @@
                   feedback-link="https://github.com/Yu-HaruWolf/docker-codelab/issues">
     
       <google-codelab-step label="初めに" duration="2">
-        <p>このcodelabでは、Dockerについての基礎を学びます。 Dockerに関連する単語について解説し、実際に、イメージやコンテナを作成して動かしていきます。 このcodelabを通して、Dockerについて基本的な操作を1通り行うことができます。</p>
+        <p>このcodelabでは、Dockerについての基礎を学びます。 Dockerに関連する単語について解説し、実際に、イメージやコンテナを作成して動かしていきます。 このcodelabを通して、Dockerについて基本的な操作を1通り行うことができます。 ※このcodelabに出てくる図などは正確ではない場合があります。</p>
 <h2 is-upgraded>前提条件</h2>
 <ul>
 <li>インターネットに繋がるPC</li>
@@ -46,8 +46,9 @@
 <p>また、仮想環境上で動作するゲストOSはホストOSから独立しているため、 ゲストOSで行った作業が、ホストOSや他の仮想環境に与える影響は少ないメリットもあります。 (ただし、CPUやメモリのリソースや、仮想環境プラットフォームの脆弱性を狙った攻撃に関しては、ホストOSにも大きな影響を与えます。)</p>
 <p>仮想環境は、独立した環境であるため、複数の開発者で統一した開発環境を用意することにも役立ちます。 「仮想マシン」は、ホストOS上で、ゲストOSを完全にエミュレートします。 ゲストOSは独立したOSを持つため、ゲストOS自体を動作させるためにリソース消費が大きくなってしまう傾向があります。 仮想マシンのイメージ図はこんな感じです。</p>
 <p class="image-container"><img style="width: 500.00px" src="img/30a422f98f18acfa.png"></p>
-<p>一方で、「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、 仮想マシンよりもリソース消費が少なく済みます。</p>
-<p>Dockerでは、コンテナ型の仮想環境を簡単に作成、管理することができます。</p>
+<p>一方で、「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、 仮想マシンよりもリソース消費が少なく済みます。 Dockerにおける、コンテナのイメージ図はこんな感じです。</p>
+<p class="image-container"><img style="width: 400.00px" src="img/38fbb9c60b7e54a6.png"></p>
+<p>ゲストOSが減った分、サイズも小さくなっています。 Dockerでは、コンテナ型の仮想環境を簡単に作成、管理することができます。</p>
 
 
       </google-codelab-step>
@@ -143,6 +144,8 @@ echo &#34;Hello from Docker container!&#34; &gt; index.html
 <h2 is-upgraded>CMD</h2>
 <p>Docker イメージをコンテナ化した後に、実行される時にデフォルトで実行されるコマンドです。</p>
 <p>動かしたいアプリケーションを動作させるためのコマンドを入れておくと良いと思います。</p>
+<h2 is-upgraded>他のインストラクションも知りたい場合</h2>
+<p>dockerdocsに他のインストラクションの説明もあります。 興味のある方はぜひご覧ください。→<a href="https://docs.docker.com/reference/dockerfile/" target="_blank">https://docs.docker.com/reference/dockerfile/</a></p>
 
 
       </google-codelab-step>
@@ -180,7 +183,7 @@ EXPOSE 3000
 <p>Dockerfileを作成して実行することができたら、Dockerfileの内容を振り返りましょう。 1つずつ確認していきます。</p>
 <pre><code language="language-Dockerfile" class="language-Dockerfile">FROM ubuntu:24.04
 </code></pre>
-<p>FROMのインストラクションは基となるイメージを指定する物でした。 今回はubuntuの24.04のイメージを指定しています。</p>
+<p>FROMのインストラクションは基となるイメージを指定する物でした。 今回はubuntuの24.04のイメージを指定しています。 ちなみに、Dockerには様々なイメージがあり、用途によって使い分けることができます。 Ubuntuの元であるDebianを軽量化したイメージ、debian-slimなどもあり、イメージを軽量化したい場合はこちらが使われることもあります。</p>
 <pre><code language="language-Dockerfile" class="language-Dockerfile">RUN apt-get update \
     &amp;&amp; apt-get upgrade -y \
     &amp;&amp; apt-get install -y --no-install-recommends \
@@ -190,7 +193,8 @@ EXPOSE 3000
 RUN npm install -g yarn
 </code></pre>
 <p>RUNはDocker イメージをビルドする時に、コマンドを実行する物でした。 ここでは4つのコマンドを1つのインストラクションにまとめて実行しています。 Shellに関して補足をしておくと、バックスラッシュ(<code>\</code>)を書いておくと、コマンドの途中でも改行が入れることができます。 <code>&&</code>は、コマンド間を繋げる演算子で、前のコマンドが成功したら次のコマンドが実行されるというものになります。</p>
-<p>ここでは、Ubuntuのパッケージ管理システムと<code>npm</code>を使って、 今回のWebアプリケーションの実行に必要なソフトウェアをインストールしています。</p>
+<p>ここでは、Ubuntuのパッケージ管理システムと<code>npm</code>を使って、 今回のWebアプリケーションの実行に必要なソフトウェアをインストールしています。 また、イメージを軽くするために、不必要なデータは最後にまとめて削除しています。</p>
+<p>dockerdocsにベストプラクティスが掲載されています。興味があればこちらをどうぞ→<a href="https://docs.docker.com/build/building/best-practices/#:~:text=in%20package%20duplication.-,In%20addition%2C%20when%20you%20clean%20up%20the%20apt%20cache%20by%20removing,.,-Official%20Debian%20and" target="_blank">https://docs.docker.com/build/building/best-practices/</a></p>
 <pre><code language="language-Dockerfile" class="language-Dockerfile">WORKDIR /app
 </code></pre>
 <p>WORKDIRは作業ディレクトリを指定する物でした。 今回は、<code>/app</code>を作業ディレクトリとして設定し、 Webアプリケーションもこのディレクトリに格納して、実行するようにしています。</p>
@@ -206,12 +210,17 @@ RUN npm install -g yarn
 <pre><code language="language-Dockerfile" class="language-Dockerfile">EXPOSE 3000
 </code></pre>
 <p>EXPOSEはこのDocker イメージが使用するポート番号を指定する物です。 ただ、このインストラクションはこれだけではあまり大きな意味を持たず、 実行時にコマンドで指定をすることで意味を持ちます。 「このインストラクションさえ書いておけば外部からアクセスできるようになる」というわけではないんです。</p>
+<h2 is-upgraded>Challenge</h2>
+<p>Pythonで書いたプログラムを実行するDockerfileはどのように書けるでしょうか？考えてみましょう。 Hello, World!を出力するだけでも良いので、考えて書いて動かしてみると最初の練習になります。</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Next step" duration="5">
         <p>以上で、Docker入門ハンズオンは終わりです。 今回はCloud Shell上で動かしてみましたが、手元で動かしたい場合は、こちらのリンクを参考にDockerを手元で用意できます。<br><a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a></p>
+<p>もし時間があれば、Docker Composeについても学んでみましょう。 データベースを必要とするWebサービスなど、複数コンテナを必要とする場合に有効です。<br> 日本語→<a href="https://docs.docker.jp/compose/gettingstarted.html" target="_blank">https://docs.docker.jp/compose/gettingstarted.html</a><br> 英語→<a href="https://docs.docker.com/compose/gettingstarted/" target="_blank">https://docs.docker.com/compose/gettingstarted/</a><br> ※英語と日本語で若干内容が違います。</p>
+<p>コンテナの中に入っているデータは、コンテナが破棄されると同時に失われてしまいます。<br> コンテナ削除にデータが巻き込まれないようにする方法として今日実践したバインドマウントの他にボリュームを使う方法があります。<br> ボリュームについてはこちらの記事がおすすめです→<a href="https://qiita.com/gounx2/items/23b0dc8b8b95cc629f32" target="_blank">https://qiita.com/gounx2/items/23b0dc8b8b95cc629f32</a></p>
+<p>本日の内容をより開発環境で活用する方法があります。<br> devcontainerを使用すると、開発環境として、コンテナを活用することができます。<br> devcontainerを使えるようになると、GitHub Codespacesなどのクラウド開発環境でも、オリジナルの開発環境を構築できたりします<br> devcontainerについてはこちらの記事がおすすめです→<a href="https://qiita.com/yoshii0110/items/c480e98cfe981e36dd56" target="_blank">https://qiita.com/yoshii0110/items/c480e98cfe981e36dd56</a><br> ※記事中にも出てきていますが、既にオンラインで公開されているイメージを使用すればよい場合は、Dockerfileを書く必要すらありません。</p>
 <p>本日の内容を学ぶことで、「コンテナ型仮想環境」を作成することができるようになりました。 コンテナ型仮想環境を作成できるようになると、Google Cloud の Cloud Run等で、好きなコンテナを作成して、動かすことができるようになります。 Cloud RunはVirtual Machineとは違い、呼び出された時に、コンテナが立ち上がって実行されるので、待機時間中のコストを抑えることができます。 Cloud Runについて学びたい方はこちらのリンクをご覧ください。<br><a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
 
 

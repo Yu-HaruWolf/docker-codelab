@@ -13,6 +13,7 @@ Duration: 0:02:00
 このcodelabでは、Dockerについての基礎を学びます。
 Dockerに関連する単語について解説し、実際に、イメージやコンテナを作成して動かしていきます。
 このcodelabを通して、Dockerについて基本的な操作を1通り行うことができます。
+※このcodelabに出てくる図などは正確ではない場合があります。
 
 ### 前提条件
 
@@ -43,7 +44,11 @@ DockerはDocker社が開発している仮想環境プラットフォームで�
 一方で、「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。
 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、
 仮想マシンよりもリソース消費が少なく済みます。
+Dockerにおける、コンテナのイメージ図はこんな感じです。
 
+<img src="img/Docker.png" width="400">
+
+ゲストOSが減った分、サイズも小さくなっています。
 Dockerでは、コンテナ型の仮想環境を簡単に作成、管理することができます。
 
 ## Keywords
@@ -201,6 +206,10 @@ Docker イメージをコンテナ化した後に、実行される時にデフ�
 
 動かしたいアプリケーションを動作させるためのコマンドを入れておくと良いと思います。
 
+### 他のインストラクションも知りたい場合
+dockerdocsに他のインストラクションの説明もあります。
+興味のある方はぜひご覧ください。→[https://docs.docker.com/reference/dockerfile/](https://docs.docker.com/reference/dockerfile/)
+
 ## Let's write Dockerfile
 Duration: 0:25:00
 それでは早速Dockerfileを書いていきましょう。
@@ -253,6 +262,8 @@ FROM ubuntu:24.04
 ```
 FROMのインストラクションは基となるイメージを指定する物でした。
 今回はubuntuの24.04のイメージを指定しています。
+ちなみに、Dockerには様々なイメージがあり、用途によって使い分けることができます。
+Ubuntuの元であるDebianを軽量化したイメージ、debian-slimなどもあり、イメージを軽量化したい場合はこちらが使われることもあります。
 
 ```Dockerfile
 RUN apt-get update \
@@ -270,6 +281,10 @@ Shellに関して補足をしておくと、バックスラッシュ(`\`)を書�
 
 ここでは、Ubuntuのパッケージ管理システムと`npm`を使って、
 今回のWebアプリケーションの実行に必要なソフトウェアをインストールしています。
+また、イメージを軽くするために、不必要なデータは最後にまとめて削除しています。
+
+dockerdocsにベストプラクティスが掲載されています。興味があればこちらをどうぞ→[https://docs.docker.com/build/building/best-practices/](https://docs.docker.com/build/building/best-practices/#:~:text=in%20package%20duplication.-,In%20addition%2C%20when%20you%20clean%20up%20the%20apt%20cache%20by%20removing,.,-Official%20Debian%20and)
+
 
 ```Dockerfile
 WORKDIR /app
@@ -303,6 +318,10 @@ EXPOSEはこのDocker イメージが使用するポート番号を指定する�
 実行時にコマンドで指定をすることで意味を持ちます。
 「このインストラクションさえ書いておけば外部からアクセスできるようになる」というわけではないんです。
 
+### Challenge
+Pythonで書いたプログラムを実行するDockerfileはどのように書けるでしょうか？考えてみましょう。
+Hello, World!を出力するだけでも良いので、考えて書いて動かしてみると最初の練習になります。
+
 
 ## Next step
 Duration: 0:05:00
@@ -310,6 +329,22 @@ Duration: 0:05:00
 以上で、Docker入門ハンズオンは終わりです。
 今回はCloud Shell上で動かしてみましたが、手元で動かしたい場合は、こちらのリンクを参考にDockerを手元で用意できます。<br>
 [https://docs.docker.com/get-started/get-docker/](https://docs.docker.com/get-started/get-docker/)
+
+もし時間があれば、Docker Composeについても学んでみましょう。
+データベースを必要とするWebサービスなど、複数コンテナを必要とする場合に有効です。<br>
+日本語→[https://docs.docker.jp/compose/gettingstarted.html](https://docs.docker.jp/compose/gettingstarted.html)<br>
+英語→[https://docs.docker.com/compose/gettingstarted/](https://docs.docker.com/compose/gettingstarted/)<br>
+※英語と日本語で若干内容が違います。
+
+コンテナの中に入っているデータは、コンテナが破棄されると同時に失われてしまいます。<br>
+コンテナ削除にデータが巻き込まれないようにする方法として今日実践したバインドマウントの他にボリュームを使う方法があります。<br>
+ボリュームについてはこちらの記事がおすすめです→[https://qiita.com/gounx2/items/23b0dc8b8b95cc629f32](https://qiita.com/gounx2/items/23b0dc8b8b95cc629f32)
+
+本日の内容をより開発環境で活用する方法があります。<br>
+devcontainerを使用すると、開発環境として、コンテナを活用することができます。<br>
+devcontainerを使えるようになると、GitHub Codespacesなどのクラウド開発環境でも、オリジナルの開発環境を構築できたりします<br>
+devcontainerについてはこちらの記事がおすすめです→[https://qiita.com/yoshii0110/items/c480e98cfe981e36dd56](https://qiita.com/yoshii0110/items/c480e98cfe981e36dd56)<br>
+※記事中にも出てきていますが、既にオンラインで公開されているイメージを使用すればよい場合は、Dockerfileを書く必要すらありません。
 
 本日の内容を学ぶことで、「コンテナ型仮想環境」を作成することができるようになりました。
 コンテナ型仮想環境を作成できるようになると、Google Cloud の Cloud Run等で、好きなコンテナを作成して、動かすことができるようになります。
