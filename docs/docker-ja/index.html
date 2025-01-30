@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Docker Hands-on</title>
+  <title>Docker 入門ハンズオン</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -24,9 +24,9 @@
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="docker-ja"
-                  title="Docker Hands-on"
+                  title="Docker 入門ハンズオン"
                   environment="web"
-                  feedback-link="">
+                  feedback-link="https://github.com/Yu-HaruWolf/docker-codelab/issues">
     
       <google-codelab-step label="初めに" duration="2">
         <p>このcodelabでは、Dockerについての基礎を学びます。 Dockerに関連する単語について解説し、実際に、イメージやコンテナを作成して動かしていきます。 このcodelabを通して、Dockerについて基本的な操作を1通り行うことができます。</p>
@@ -44,7 +44,9 @@
 <h2 is-upgraded>仮想環境とは</h2>
 <p>仮想環境とは、1つのコンピュータ上で、別のコンピュータを動作させる環境です。 例えば、仮想環境を使えば、Windows上でLinuxのOSを仮想的に動作させることができます。 仮想環境を用意するOSをホストOS、仮想環境上で動いているOSのことをゲストOSと呼ぶことがあります。</p>
 <p>また、仮想環境上で動作するゲストOSはホストOSから独立しているため、 ゲストOSで行った作業が、ホストOSや他の仮想環境に与える影響は少ないメリットもあります。 (ただし、CPUやメモリのリソースや、仮想環境プラットフォームの脆弱性を狙った攻撃に関しては、ホストOSにも大きな影響を与えます。)</p>
-<p>仮想環境は、独立した環境であるため、複数の開発者で統一した開発環境を用意することにも役立ちます。 「仮想マシン」は、ホストOS上で、ゲストOSを完全にエミュレートします。 ゲストOSは独立したOSを持つため、ゲストOS自体を動作させるためにリソース消費が大きくなってしまう傾向があります。 「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、 仮想マシンよりもリソース消費が少なく済みます。</p>
+<p>仮想環境は、独立した環境であるため、複数の開発者で統一した開発環境を用意することにも役立ちます。 「仮想マシン」は、ホストOS上で、ゲストOSを完全にエミュレートします。 ゲストOSは独立したOSを持つため、ゲストOS自体を動作させるためにリソース消費が大きくなってしまう傾向があります。 仮想マシンのイメージ図はこんな感じです。</p>
+<p class="image-container"><img style="width: 500.00px" src="img/30a422f98f18acfa.png"></p>
+<p>一方で、「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、 仮想マシンよりもリソース消費が少なく済みます。</p>
 <p>Dockerでは、コンテナ型の仮想環境を簡単に作成、管理することができます。</p>
 
 
@@ -155,8 +157,10 @@ cd getting-started-app
 <pre><code language="language-Dockerfile" class="language-Dockerfile">FROM ubuntu:24.04
 RUN apt-get update \
     &amp;&amp; apt-get upgrade -y \
-    &amp;&amp; apt-get install nodejs npm -y \
-    &amp;&amp; apt-get clean
+    &amp;&amp; apt-get install -y --no-install-recommends \
+    nodejs \ 
+    npm \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 WORKDIR /app
 COPY . .
@@ -179,8 +183,10 @@ EXPOSE 3000
 <p>FROMのインストラクションは基となるイメージを指定する物でした。 今回はubuntuの24.04のイメージを指定しています。</p>
 <pre><code language="language-Dockerfile" class="language-Dockerfile">RUN apt-get update \
     &amp;&amp; apt-get upgrade -y \
-    &amp;&amp; apt-get install nodejs npm -y \
-    &amp;&amp; apt-get clean
+    &amp;&amp; apt-get install -y --no-install-recommends \
+    nodejs \ 
+    npm \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 </code></pre>
 <p>RUNはDocker イメージをビルドする時に、コマンドを実行する物でした。 ここでは4つのコマンドを1つのインストラクションにまとめて実行しています。 Shellに関して補足をしておくと、バックスラッシュ(<code>\</code>)を書いておくと、コマンドの途中でも改行が入れることができます。 <code>&&</code>は、コマンド間を繋げる演算子で、前のコマンドが成功したら次のコマンドが実行されるというものになります。</p>
@@ -205,8 +211,8 @@ RUN npm install -g yarn
       </google-codelab-step>
     
       <google-codelab-step label="Next step" duration="5">
-        <p>手元で動かしたい場合→<a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a></p>
-<p>Cloud Run→<a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
+        <p>以上で、Docker入門ハンズオンは終わりです。 今回はCloud Shell上で動かしてみましたが、手元で動かしたい場合は、こちらのリンクを参考にDockerを手元で用意できます。<br><a href="https://docs.docker.com/get-started/get-docker/" target="_blank">https://docs.docker.com/get-started/get-docker/</a></p>
+<p>本日の内容を学ぶことで、「コンテナ型仮想環境」を作成することができるようになりました。 コンテナ型仮想環境を作成できるようになると、Google Cloud の Cloud Run等で、好きなコンテナを作成して、動かすことができるようになります。 Cloud RunはVirtual Machineとは違い、呼び出された時に、コンテナが立ち上がって実行されるので、待機時間中のコストを抑えることができます。 Cloud Runについて学びたい方はこちらのリンクをご覧ください。<br><a href="https://www.cloudskillsboost.google/course_templates/741" target="_blank">https://www.cloudskillsboost.google/course_templates/741</a></p>
 
 
       </google-codelab-step>

@@ -1,10 +1,11 @@
 authors: Yuki
-summary: Docker Hands-on
+summary: Docker 入門ハンズオン
 id: docker-ja
 categories: Docker
 environments: web
+Feedback Link: https://github.com/Yu-HaruWolf/docker-codelab/issues
 
-# Docker Hands-on
+# Docker 入門ハンズオン
 
 ## 初めに
 Duration: 0:02:00
@@ -35,7 +36,11 @@ DockerはDocker社が開発している仮想環境プラットフォームで�
 仮想環境は、独立した環境であるため、複数の開発者で統一した開発環境を用意することにも役立ちます。
 「仮想マシン」は、ホストOS上で、ゲストOSを完全にエミュレートします。
 ゲストOSは独立したOSを持つため、ゲストOS自体を動作させるためにリソース消費が大きくなってしまう傾向があります。
-「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。
+仮想マシンのイメージ図はこんな感じです。
+
+<img src="img/VirtualMachine.png" width="500">
+
+一方で、「コンテナ」は、アプリケーション実行に必要な最小限の環境のみを仮想化する方式です。
 コンテナは、ホストOSのカーネル(根幹部分)を共有するため、ゲストOS自体を動作させるリソースが必要ない分、
 仮想マシンよりもリソース消費が少なく済みます。
 
@@ -214,8 +219,10 @@ Dockerfileの内容は次のようにしましょう。
 FROM ubuntu:24.04
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install nodejs npm -y \
-    && apt-get clean
+    && apt-get install -y --no-install-recommends \
+    nodejs \ 
+    npm \
+    && rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 WORKDIR /app
 COPY . .
@@ -250,8 +257,10 @@ FROMのインストラクションは基となるイメージを指定する物�
 ```Dockerfile
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install nodejs npm -y \
-    && apt-get clean
+    && apt-get install -y --no-install-recommends \
+    nodejs \ 
+    npm \
+    && rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 ```
 RUNはDocker イメージをビルドする時に、コマンドを実行する物でした。
@@ -298,6 +307,12 @@ EXPOSEはこのDocker イメージが使用するポート番号を指定する�
 ## Next step
 Duration: 0:05:00
 
-手元で動かしたい場合→[https://docs.docker.com/get-started/get-docker/](https://docs.docker.com/get-started/get-docker/)
+以上で、Docker入門ハンズオンは終わりです。
+今回はCloud Shell上で動かしてみましたが、手元で動かしたい場合は、こちらのリンクを参考にDockerを手元で用意できます。<br>
+[https://docs.docker.com/get-started/get-docker/](https://docs.docker.com/get-started/get-docker/)
 
-Cloud Run→[https://www.cloudskillsboost.google/course_templates/741](https://www.cloudskillsboost.google/course_templates/741)
+本日の内容を学ぶことで、「コンテナ型仮想環境」を作成することができるようになりました。
+コンテナ型仮想環境を作成できるようになると、Google Cloud の Cloud Run等で、好きなコンテナを作成して、動かすことができるようになります。
+Cloud RunはVirtual Machineとは違い、呼び出された時に、コンテナが立ち上がって実行されるので、待機時間中のコストを抑えることができます。
+Cloud Runについて学びたい方はこちらのリンクをご覧ください。<br>
+[https://www.cloudskillsboost.google/course_templates/741](https://www.cloudskillsboost.google/course_templates/741)

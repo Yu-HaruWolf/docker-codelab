@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-01-14T20:41:01Z",
+  "updated": "2025-01-30T08:02:00Z",
   "id": "docker-ja",
   "duration": 88,
-  "title": "Docker Hands-on",
+  "title": "Docker 入門ハンズオン",
   "authors": "Yuki",
-  "summary": "Docker Hands-on",
+  "summary": "Docker 入門ハンズオン",
   "source": "codelab-ja.md",
   "theme": "",
   "status": null,
@@ -18,5 +18,6 @@
   "tags": [
     "web"
   ],
+  "feedback": "https://github.com/Yu-HaruWolf/docker-codelab/issues",
   "url": "docker-ja"
 }
